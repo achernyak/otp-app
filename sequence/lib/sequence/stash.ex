@@ -1,6 +1,8 @@
 defmodule Sequence.Stash do
   use GenServer
 
+  @vsn "1"
+
   # External API
 
   def start_link(current_number) do
@@ -23,5 +25,9 @@ defmodule Sequence.Stash do
 
   def handle_cast({:save_value, value}, _current_value) do
     {:noreply, value}
+  end
+
+  def code_change("0", old_state = current_number, _extra) do
+    new_state = %Sequence.Server.State{current_number: current_number, delta: 1}
   end
 end
